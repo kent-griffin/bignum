@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bignum"
+version = "0.1.0"
+description = "A small, easy-to-use wrapper around Python's Decimal with configurable precision and rounding."
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Kent" }
+]
+
+# No external deps – only stdlib `decimal` is used
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/kent-griffin/bignum"
+Source = "https://github.com/kent-griffin/bignum"
+Issues = "https://github.com/kent-griffin/bignum/issues"
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "build",
+  "twine",
+]
