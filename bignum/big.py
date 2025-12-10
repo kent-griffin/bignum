@@ -96,24 +96,51 @@ class Big:
 
     def eq(self, other) -> bool:
         return self.cmp(other) == 0
+    
+    def __eq__(self, other) -> bool:
+        return self.cmp(other) == 0
 
     def lt(self, other) -> bool:
+        return self.cmp(other) < 0
+    
+    def __lt__(self, other) -> bool:
         return self.cmp(other) < 0
 
     def lte(self, other) -> bool:
         return self.cmp(other) <= 0
+    
+    def __le__(self, other) -> bool:
+        return self.cmp(other) <= 0
 
     def gt(self, other) -> bool:
+        return self.cmp(other) > 0
+    
+    def __gt__(self, other) -> bool:
         return self.cmp(other) > 0
 
     def gte(self, other) -> bool:
         return self.cmp(other) >= 0
+    
+    def __ge__(self, other) -> bool:
+        return self.cmp(other) >= 0
+    
+    def abs(self):
+        return Big(self._d.copy_abs())
+    
+    def __abs__(self):
+        return Big(self._d.copy_abs())
 
     # ------------ arithmetic ------------
 
     def plus(self, other):
         """Return a new Big = this + other."""
-        o = Big(other)
+        o = Big(other) if not isinstance(other, Big) else other
+        with self._local_ctx():
+            return self._wrap(self._d + o._d)
+        
+    def __add__(self, other):
+        """Return a new Big = this + other."""
+        o = Big(other) if not isinstance(other, Big) else other
         with self._local_ctx():
             return self._wrap(self._d + o._d)
 
@@ -121,7 +148,13 @@ class Big:
 
     def minus(self, other):
         """Return a new Big = this - other."""
-        o = Big(other)
+        o = Big(other) if not isinstance(other, Big) else other
+        with self._local_ctx():
+            return self._wrap(self._d - o._d)
+        
+    def __sub__(self, other):
+        """Return a new Big = this - other."""
+        o = Big(other) if not isinstance(other, Big) else other
         with self._local_ctx():
             return self._wrap(self._d - o._d)
 
@@ -129,10 +162,16 @@ class Big:
 
     def times(self, other):
         """Return a new Big = this * other."""
-        o = Big(other)
+        o = Big(other) if not isinstance(other, Big) else other
         with self._local_ctx():
             return self._wrap(self._d * o._d)
 
+    def __mul__(self, other):
+        """Return a new Big = this * other."""
+        o = Big(other) if not isinstance(other, Big) else other
+        with self._local_ctx():
+            return self._wrap(self._d * o._d)
+        
     mul = times  # alias
 
     def div(self, other):
@@ -141,7 +180,7 @@ class Big:
 
         Result is rounded to Big.DP decimal places using Big.RM,
         """
-        o = Big(other)
+        o = Big(other) if not isinstance(other, Big) else other
         # Test the value
         with self._local_ctx():
             q = self._d / o._d
@@ -151,7 +190,24 @@ class Big:
             else:
                 q = q.quantize(Decimal(1))  # integer
             return self._wrap(q)
+        
+    def __truediv__(self, other):
+        """
+        Return a new Big = this / other.
 
+        Result is rounded to Big.DP decimal places using Big.RM,
+        """
+        o = Big(other) if not isinstance(other, Big) else other
+        # Test the value
+        with self._local_ctx():
+            q = self._d / o._d
+            if self.DP > 0:
+                unit = Decimal(1).scaleb(-self.DP)  # 10^-DP
+                q = q.quantize(unit)
+            else:
+                q = q.quantize(Decimal(1))  # integer
+            return self._wrap(q)
+        
     def sqrt(self):
         """
         Return square root of this Big, rounded to Big.DP places.
@@ -166,6 +222,10 @@ class Big:
             return self._wrap(q)
 
     def neg(self):
+        """Return a new Big which is the negation of this Big."""
+        return self._wrap(-self._d)
+    
+    def __ne__(self):
         """Return a new Big which is the negation of this Big."""
         return self._wrap(-self._d)
 
