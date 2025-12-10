@@ -1,12 +1,11 @@
-# Big — Arbitrary-Precision Decimal Numbers for Python
+# Bignum — Arbitrary-Precision Decimal Numbers for Python
 
-`Big` is a tiny wrapper around Python’s built-in [`decimal.Decimal`](https://docs.python.org/3/library/decimal.html) type.
+`Bignum` is a tiny wrapper around Python’s built-in [`decimal.Decimal`](https://docs.python.org/3/library/decimal.html) type.
 
 It gives you:
 
 - Easy, consistent handling of **big numbers** (money, crypto, prices, etc.)
 - **Configurable precision** (`DP`) and **rounding mode** (`RM`)
-- A simple API inspired by JavaScript libraries like `big.js`
 
 Perfect when `float` is too imprecise and you want something safer but still easy to use.
 
@@ -26,13 +25,13 @@ Perfect when `float` is too imprecise and you want something safer but still eas
 If you’ve published this as a package:
 
 ```bash
-pip install big
+pip install bignum
 ```
 
 ## Quick Start
 
 ```python
-from big import Big
+from bignum import Big
 
 # Basic construction
 a = Big("0.1")
@@ -53,7 +52,7 @@ print(d)           # -> 4.92
 Because Big uses Decimal under the hood, you don’t get the usual floating-point surprises:
 
 ```python
-from big import Big
+from bignum import Big
 
 print(0.1 + 0.2)        # 0.30000000000000004 (float)
 print(Big("0.1") + Big("0.2"))  # 0.3 (Big)
@@ -64,7 +63,7 @@ print(Big("0.1") + Big("0.2"))  # 0.3 (Big)
 `Big` exposes two important global settings:
 
 ```python
-from big import Big
+from bignum import Big
 
 # Maximum decimal places for division, sqrt, etc.
 Big.DP = 20    # default: 20
@@ -84,7 +83,7 @@ You can also use decimal.localcontext() for temporary precision overrides inside
 ## Creating Big Numbers
 
 ```python
-from big import Big
+from bignum import Big
 from decimal import Decimal
 
 Big("1.2345")         # from string
@@ -131,7 +130,7 @@ print(x * y)      # -> 4.5
 Division respects Big.DP and Big.RM:
 
 ```python
-from big import Big
+from bignum import Big
 
 Big.DP = 10
 Big.RM = 1  # ROUND_HALF_UP
